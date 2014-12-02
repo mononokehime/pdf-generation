@@ -1,0 +1,48 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+  	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+              http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.4.xsd"> 
+
+<beans:bean id="authenticationProcessingFilterEntryPoint" 
+	class="org.springframework.security.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+	<beans:property name="loginFormUrl" value="/login/login.do"/>
+	<beans:property name="forceHttps" value="false"/>
+</beans:bean>
+<!-- session fixation is pretty cool - copies over or creates session on login -->
+ <http entry-point-ref="authenticationProcessingFilterEntryPoint">    
+    <intercept-url pattern="/user-management/**" access="ROLE_USER, ROLE_SUPER_USER" /> 
+    <intercept-url pattern="/search/**" access="ROLE_USER, ROLE_SUPER_USER" /> 
+    <intercept-url pattern="/template/**" access="ROLE_USER, ROLE_SUPER_USER" /> 
+    <intercept-url pattern="/file-admin/**" access="ROLE_USER, ROLE_SUPER_USER" /> 
+    <intercept-url pattern="/home.do*" access="ROLE_USER, ROLE_SUPER_USER" />          
+  	
+  	<!-- in conjunction with a listener in web.xml this prevents multiple logins -->
+  	<!-- commented out as doesn't work in test cases, not in session properly <concurrent-session-control max-sessions="1" /> -->
+  	<!--  -->
+  	
+  </http>
+  
+  <authentication-manager alias="authenticationManager"/>
+  <beans:bean  class="org.project.company.greenhomes.web.auth.ESTAuthenticationProcessingFilter" >
+  	<custom-filter position="AUTHENTICATION_PROCESSING_FILTER" />
+  	<beans:property name="defaultTargetUrl" value="/home.do"/>
+  	<beans:property name="authenticationFailureUrl" value="/login/login.do"/>
+  	<beans:property name="authenticationManager" ref="authenticationManager"/> 
+  	<beans:property name="messageSource" ref="messageSource"/>    	
+  </beans:bean>
+  <beans:bean id="logoutFilter" class="org.springframework.security.ui.logout.LogoutFilter">
+  		<custom-filter position="LOGOUT_FILTER" />
+  		<beans:constructor-arg value="/login/login.do"/>
+  		<beans:constructor-arg>
+  			<beans:list>
+  				<beans:ref bean="eSTLogoutHandler"/>
+  			</beans:list>
+  		</beans:constructor-arg>
+  </beans:bean>
+   <beans:bean id="eSTLogoutHandler" class="org.project.company.greenhomes.web.auth.ESTLogoutHandler">
+   </beans:bean>
+  <authentication-provider user-service-ref='userService'>
+  <password-encoder hash="sha"/>
+  </authentication-provider>
+</beans:beans>

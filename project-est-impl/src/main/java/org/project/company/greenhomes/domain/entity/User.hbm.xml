@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.project.company.greenhomes.domain.entity.User" table="GREEN_HOMES.USERS">
+		<cache usage="read-write"/>
+		<id name="userId" type="java.lang.Long">
+			<column name="user_id"/>
+			<generator class="sequence">
+				<param name="sequence">component_id_sequence</param>
+			</generator>
+
+		</id>
+		<property name="countryId" type="java.lang.Integer">
+			<column name="country_id" not-null="false"/>
+		</property>
+		<property name="createDate" type="java.util.Date">
+			<column name="create_date" not-null="true"/>
+		</property>
+		<property name="title" type="java.lang.String">
+			<column name="title" length="8" not-null="false"/>
+		</property>
+
+		<property name="firstName" type="java.lang.String">
+			<column name="first_name" length="16" not-null="true"/>
+		</property>
+		<property name="familyName" type="java.lang.String">
+			<column name="family_name" length="32" not-null="true"/>
+		</property>
+		<property name="addressLine1" type="java.lang.String">
+			<column name="address_line_1" length="32" not-null="false"/>
+		</property>
+		<property name="addressLine2" type="java.lang.String">
+			<column name="address_line_2" length="32" not-null="false"/>
+		</property>
+		<property name="addressLine3" type="java.lang.String">
+			<column name="address_line_3" length="32" not-null="false"/>
+		</property>
+		<property name="postTown" type="java.lang.String">
+			<column name="post_town" length="32" not-null="false"/>
+		</property>
+		<property name="postCode" type="java.lang.String">
+			<column name="post_code" length="16" not-null="false"/>
+		</property>
+		<property name="county" type="java.lang.String">
+			<column name="county" length="16" not-null="false"/>
+		</property>
+		<property name="userName" type="java.lang.String">
+			<column name="user_name" length="32" not-null="true"/>
+		</property>
+		<property name="password" type="java.lang.String">
+			<column name="password" length="12" not-null="false"/>
+		</property>
+		<property name="emailAddress" type="java.lang.String">
+			<column name="email_address" length="64" not-null="true"/>
+		</property>
+		<property name="active" type="java.lang.Boolean">
+			<column name="active" length="1" not-null="true"/>
+		</property>
+		<set name="userRoleSet" lazy="false" fetch="join" cascade="all" order-by="role_name">
+			<key>
+				<column name="user_id" length="16"/>
+			</key>
+			<one-to-many class="org.project.company.greenhomes.domain.entity.UserRole"/>
+		</set>
+
+	</class>
+
+</hibernate-mapping>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+
+    
+    <!-- for reloadable properties files -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <value>classpath:messages</value>
+        </property>   
+        <property name="cacheSeconds">
+            <value>3600</value>
+        </property>
+    </bean>    
+
+	<import resource="datasource.xml"/> 
+	<import resource="hibernate.xml"/> 
+	<import resource="dao.xml"/> 	
+	<!-- Required to connect to datasource -->
+	<bean name="PropertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	     <property name="properties" ref="CommonsConfigurationFactoryBean"/>
+	</bean>
+	<bean name="CommonsConfigurationFactoryBean" class="org.springmodules.commons.configuration.CommonsConfigurationFactoryBean">
+	       <constructor-arg ref="DatabaseConfiguration"/>
+	</bean>
+	<bean name="DatabaseConfiguration" class="org.apache.commons.configuration.DatabaseConfiguration">
+	        <constructor-arg type="javax.sql.DataSource" ref="userDataSource"/>
+	        <constructor-arg index="1" value="GREEN_HOMES.APPLICATION_PROPERTIES"/>
+	        <constructor-arg index="2" value="NAME"/>
+	        <constructor-arg index="3" value="VALUE"/>
+	</bean>		
+	<import resource="email.xml"/>
+	<import resource="pdf-templates.xml"/>
+	<import resource="service.xml"/> 
+	<import resource="schedule.xml"/>
+	<import resource="security.xml"/> 
+
+</beans>

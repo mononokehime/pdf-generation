@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.project.company.greenhomes.domain.entity.UserRole" table="GREEN_HOMES.USERS_ROLE">
+		<cache usage="read-write"/>
+		<id name="userRoleId" type="java.lang.Long">
+			<column name="user_role_id"/>
+			<generator class="sequence">
+				<param name="sequence">component_id_sequence</param>
+			</generator>
+		</id>
+		<!--<property name="userId" type="java.lang.Long" insert="false" update="false">
+			<column name="user_id"  not-null="true" />
+		</property> -->
+		<property name="roleName" type="java.lang.String">
+			<column name="role_name" length="16" not-null="true"/>
+		</property>
+
+		<many-to-one name="user"
+					 class="org.project.company.greenhomes.domain.entity.User"
+					 column="user_id"
+					 not-null="true"/>
+	</class>
+
+</hibernate-mapping>

@@ -1,0 +1,158 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+
+	<bean id="webApplicationContextHolder" class="org.project.company.greenhomes.common.util.WebApplicationContextHolder"/>
+	<bean id="referenceDataService" parent="userTransactionProxy">
+		<property name="target">
+			<bean class="org.project.company.greenhomes.service.ReferenceDataServiceImpl">
+				<constructor-arg ref="localityDAO"/>
+				<constructor-arg ref="exceptionReportService"/>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">readOnly</prop>
+				<prop key="get*">readOnly</prop>
+				<prop key="populate*">readOnly</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!--  definition of the user manager -->
+	<bean id="userService" parent="userTransactionProxy">
+		<property name="target">
+			<bean class="org.project.company.greenhomes.service.UserServiceImpl">
+				<constructor-arg ref="userDAO"/>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="load*">readOnly</prop>
+				<prop key="find*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="create*">PROPAGATION_REQUIRED</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="deleteUserRoles">PROPAGATION_REQUIRES_NEW</prop>
+			</props>
+		</property>
+	</bean>
+	<!--  definition of the batch summary manager -->
+	<bean id="batchSummaryService" parent="userTransactionProxy">
+		<property name="target">
+			<bean class="org.project.company.greenhomes.service.BatchSummaryAndScheduleServiceImpl">
+				<constructor-arg ref="propertyService"/>
+				<constructor-arg ref="userService"/>
+				<constructor-arg ref="batchSummaryDAO"/>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">readOnly</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="mark*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	<!--  definition of the property sales manager -->
+	<bean id="propertyService" parent="userTransactionProxy">
+		<property name="target">
+			<bean class="org.project.company.greenhomes.service.PropertyServiceImpl">
+				<constructor-arg ref="referenceDataService"/>
+				<constructor-arg ref="exceptionReportService"/>
+				<constructor-arg ref="propertyDAO"/>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="insert*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="find*">readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	<!--  definition of the query engine manager -->
+	<bean id="queryEngineService" parent="userTransactionProxy">
+		<property name="target">
+			<bean class="org.project.company.greenhomes.service.query.QueryEngineServiceImpl">
+				<constructor-arg ref="referenceDataService"/>
+				<constructor-arg ref="propertyDAO"/>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	<!--  definition of the property sales manager -->
+	<bean id="exceptionReportService" parent="userTransactionProxy">
+		<property name="target">
+			<bean class="org.project.company.greenhomes.service.ExceptionReportServiceImpl">
+				<constructor-arg ref="exceptionReportDAO"/>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="create*">PROPAGATION_REQUIRES_NEW</prop>
+				<prop key="process*">PROPAGATION_REQUIRES_NEW</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- configure the reader for the landregistry data -->
+	<bean id="landRegistryReader" class="org.project.company.greenhomes.common.readers.LandRegistryReader">
+		<property name="batchSummaryService" ref="batchSummaryService"/>
+		<property name="mailService" ref="mailService"/>
+		<property name="referenceDataService" ref="referenceDataService"/>
+		<property name="propertyService" ref="propertyService"/>
+		<property name="messageSource" ref="messageSource"/>
+		<property name="fileUploadLocationLandRegistry" value="${file.upload.location.land.registry}"/>
+	</bean>
+	<!-- configure the reader for the land mark data -->
+	<bean id="landMarkReader" class="org.project.company.greenhomes.common.readers.LandMarkReader">
+		<property name="batchSummaryService" ref="batchSummaryService"/>
+		<property name="mailService" ref="mailService"/>
+		<property name="referenceDataService" ref="referenceDataService"/>
+		<property name="propertyService" ref="propertyService"/>
+		<property name="messageSource" ref="messageSource"/>
+		<property name="fileUploadLocationLandMark" value="${file.upload.location.landmark}"/>
+		<property name="skipFirstLine" value="${skip.first.line.of.landmark}"/>
+	</bean>
+	<bean id="mailService" class="org.project.company.greenhomes.service.MailServiceImpl">
+		<constructor-arg ref="mailSender"/>
+		<property name="landMarkSuccessfulUpload" ref="landMarkSuccessfulUpload"/>
+		<property name="landMarkFailureUpload" ref="landMarkFailureUpload"/>
+		<property name="landRegistrySuccessfulUpload" ref="landRegistrySuccessfulUpload"/>
+		<property name="landRegistryFailureUpload" ref="landRegistryFailureUpload"/>
+		<property name="passwordResetMessage" ref="passwordResetMessage"/>
+		<property name="ftpComplete" ref="ftpComplete"/>
+	</bean>
+	<bean id="pdfLetterBuilder" class="org.project.company.greenhomes.service.pdf.PdfHandler">
+		<property name="templates">
+			<map>
+				<!--  just add another entry for another template -->
+				<entry key="pdfTemplateA" value-ref="pdfTemplateA"/>
+			</map>
+		</property>
+		<property name="propertyService" ref="propertyService"/>
+		<property name="ftpConnector" ref="ftpConnector"/>
+		<property name="mailService" ref="mailService"/>
+		<property name="exceptionReportService" ref="exceptionReportService"/>
+		<property name="batchSummaryAndScheduleService" ref="batchSummaryService"/>
+		<property name="pdfOutputDirectory" value="${pdf.output.directory}"/>
+	</bean>
+	<!--  definition of the ftp client for hestia uploads -->
+	<bean id="ftpConnector" class="org.project.company.est.common.net.ftp.FTPConnector">
+		<constructor-arg value="${ftp.hestia.domain}"/>
+		<constructor-arg value="${ftp.hestia.username}"/>
+		<constructor-arg value="${ftp.hestia.password}"/>
+		<constructor-arg value="${ftp.hestia.destination.folder}"/>
+		<constructor-arg value="${proxy.use}"/>
+		<property name="socksProxyHost" value="${proxy.host}"/>
+		<property name="socksProxyPort" value="${proxy.port}"/>
+	</bean>
+</beans>

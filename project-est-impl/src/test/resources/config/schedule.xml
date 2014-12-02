@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!--  the ftp job -->
+	<bean id="ftpHestiaJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="pdfLetterBuilder"/>
+		<property name="targetMethod" value="runFtpToHestia"/>
+		<property name="concurrent" value="true"/>
+	</bean>
+	<!-- this is the job to run the land registry read -->
+	<bean id="landRegistryJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="landRegistryReader"/>
+		<property name="targetMethod" value="readFileFromFileSystem"/>
+		<property name="concurrent" value="true"/>
+	</bean>
+	<!-- this is the job to run the landmark read -->
+	<bean id="landMarkJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="landMarkReader"/>
+		<property name="targetMethod" value="readFileFromFileSystem"/>
+		<property name="concurrent" value="true"/>
+	</bean>
+	<!-- this is the job to run the PDF writing job -->
+	<bean id="pdfWriter" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="pdfLetterBuilder"/>
+		<property name="targetMethod" value="runPdfPrinting"/>
+		<property name="concurrent" value="true"/>
+	</bean>
+	<!-- these are the trigger details for land registry job - this is the frequency -->
+	<bean id="landRegistryCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="landRegistryJob"/>
+		<!-- in milliseconds. give 10 mins to allow to start up -->
+		<!-- every hour 0 0/60 * * * ? -->
+		<property name="cronExpression" value="${cron.trigger.land.registry}"/>
+	</bean>
+	<!-- these are the trigger details for landmark job - this is the frequency -->
+	<bean id="landMarkCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="landMarkJob"/>
+		<!-- in milliseconds. give 10 mins to allow to start up -->
+		<!-- every hour 0 0/60 * * * ? -->
+		<property name="cronExpression" value="${cron.trigger.landmark}"/>
+	</bean>
+	<!-- these are the trigger details for pdf job - this is the frequency -->
+	<bean id="pdfWriterCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="pdfWriter"/>
+		<!-- in milliseconds. give 10 mins to allow to start up -->
+		<!-- every hour 0 0/60 * * * ? -->
+		<property name="cronExpression" value="${cron.trigger.pdf.writer}"/>
+	</bean>
+	<!-- these are the trigger details for pdf job - this is the frequency -->
+	<bean id="ftpHestiaCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ftpHestiaJob"/>
+		<property name="cronExpression" value="${cron.trigger.ftp.hestia}"/>
+	</bean>
+	<!-- now set up the factory bean, with list of all timers -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="landRegistryCronTrigger"/>
+				<ref bean="landMarkCronTrigger"/>
+				<ref bean="pdfWriterCronTrigger"/>
+				<ref bean="ftpHestiaCronTrigger"/>
+			</list>
+		</property>
+	</bean>
+</beans>

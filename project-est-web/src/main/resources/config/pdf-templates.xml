@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+<!-- this is the text holder for template a -->
+<bean id="pdfTemplateAText" class="org.project.company.greenhomes.service.pdf.templates.PdfTemplateAText">
+  <property name="greeting">
+  			<value>
+				<![CDATA[To the resident]]>
+			</value>
+  </property>
+  <property name="signOff">
+  			<value>
+				<![CDATA[Yours faithfully]]>
+			</value>
+  </property>  
+  <property name="letterHeadline">
+  			<value>
+				<![CDATA[Save up to $potential-saving-text$ and reduce your carbon footprint.]]>
+			</value>
+  </property>
+  <property name="paragraph1">
+  			<value>
+				<![CDATA[We are writing to you from the Energy Saving Trust. We are an independent, non-profit organisation, who provide free and impartial advice tailored to help you save energy in the home.]]>
+			</value>
+  </property>	
+  <property name="paragraph2">
+  			<value>
+				<![CDATA[Before you bought your new home, you received an Energy Performance Certificate as part of your Home Information Pack. Energy Performance Certificates give energy efficiency ratings on homes: ‘A’ being the most energy efficient and ‘G’ the least efficient. Homes which score poor energy ratings of F or G have higher running costs and have more impact on the environment.]]>
+			</value>
+  </property>	
+  <property name="ratingText">
+  			<value>
+				<![CDATA[Your home was rated: ]]>
+			</value>
+  </property>	
+  <property name="paragraph3a">
+  			<value>
+				By simply following the energy saving measures recommended in your Energy Performance Certificate you could save up to $potential-saving-text$ a year and reduce your carbon footprint by carbon-saving-text tonnes of carbon dioxide (CO
+			</value>
+  </property>  
+  <property name="paragraph3b">
+  			<value>
+				<![CDATA[). As well as advising you on the measures in your Energy Performance Certificate, we can tell you about other ways to save energy and any grants or offers available to help towards the costs of measures including loft and cavity wall insulation.]]>
+			</value>
+  </property>   
+  <property name="paragraph4">
+  			<value>
+				To start saving today call 0800 512 012 or visit
+			</value>
+  </property>
+  <property name="estimatedHeadlinePart1">
+  			<value>
+				<![CDATA[Estimated annual fuel costs and CO]]>
+			</value>
+  </property>
+  <property name="estimatedHeadlinePart2">
+  			<value>
+				<![CDATA[emissions for your home]]>
+			</value>
+  </property>  	       
+  <property name="estimatedText">
+  			<value>
+				<![CDATA[The costs and savings shown here and on your Energy Performance Certificate are based on standardised assumptions on how many people live in a home, how it is heated and where it is located. They are a way of comparing different homes. The savings only take into account the actual cost of fuel - not the cost of any associated services, maintenance or safety inspection. Remember fuel prices may have increased since your certificate was created.]]>
+			</value>
+  </property>	
+  <property name="measuresHeadline">
+  			<value>
+				<![CDATA[Here are the measures you can take to improve the rating of your home]]>
+			</value>
+  </property>  
+  <property name="lowCostMeasures">
+  			<value>
+				<![CDATA[Lower cost effective measures to improve your home$inverted-commas$ ratings (typically up to $pound-sign$500 each)]]>
+			</value>
+  </property> 
+  <property name="highCostMeasures">
+  			<value>
+				<![CDATA[Higher cost measures to improve your home$inverted-commas$ ratings (typically over $pound-sign$500 each)]]>
+			</value>
+  </property>   
+  <property name="furtherMeasuresPart1">
+  			<value>
+				<![CDATA[There are also further measures that you could consider to reduce your bills and CO]]>
+			</value>
+  </property>          
+  <property name="furtherMeasuresPart2">
+  			<value>
+				<![CDATA[emissions]]>
+			</value>
+  </property>   
+  
+</bean>
+<bean id="pdfTemplateA" class="org.project.company.greenhomes.service.pdf.templates.PdfLetterTemplateA">
+	<property name="pdfTemplateAText" ref="pdfTemplateAText" />	
+	<property name="imagesFolder" value="${pdf.images.directory}"/>  
+	<property name="epcURL" value="${pdf.epc.url}"/>  
+	<property name="pdfOutputDirectory" value="${pdf.output.directory}"/>  
+	<property name="changeCaseAddress" value="${address.case.change.elements}"/>  
+	<property name="changeCaseTown" value="${address.case.change.town}"/>  
+</bean>
+</beans>

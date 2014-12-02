@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.project.company.greenhomes.domain.entity.FormattedAddressView" table="ref_data.FORMATTED_ADDRESS_VIEW">
+		<id name="addressKey" type="java.lang.String">
+			<column name="address_key"/>
+			<generator class="assigned"/>
+		</id>
+		<property name="address" type="java.lang.String">
+			<column name="address" length="2838" not-null="true"/>
+		</property>
+		<property name="postCodeOutcode" type="java.lang.String">
+			<column name="POSTCODE_OUTCODE" length="4" not-null="true"/>
+		</property>
+		<property name="postCodeIncode" type="java.lang.String">
+			<column name="POSTCODE_INCODE" length="3" not-null="true"/>
+		</property>
+	</class>
+</hibernate-mapping>

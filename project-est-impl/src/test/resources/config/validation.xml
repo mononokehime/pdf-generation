@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<!-- see http://tinyurl.com/ytv3ro for more info on validation syntax -->
+
+	<bean id="registerUserValangValidator" class="org.springmodules.validation.valang.ValangValidator">
+		<property name="valang">
+			<value>
+				<![CDATA[
+													
+							{ firstName   : ? is not blank : '' : 'firstName.req' }
+							{ firstName 	 : ? is blank  or matches('^[a-zA-Z\'-]*$',?) == true  : '' : 'firstName.invalid' }
+							{ familyName   : ? is not blank : '' : 'familyName.req' }
+							{ familyName 	 : ? is blank  or matches('^[a-zA-Z\'-]*$',?) == true  : '' : 'familyName.invalid' }
+							{ userName   : ? is not blank : '' : 'userName.req' }
+							{ userName 	 : ? is blank  or matches('^[a-zA-Z0-9@.\'_-]*$',?) == true  : '' : 'userName.invalid' }
+							{ userName 	     : ? is blank  or length(?) <= 32 or length(?) >= 6  : '' : 'userName.length' }						  
+                            { emailAddress       : ? is not blank : '' : 'email.req' }
+			    			{ emailAddress 	     : ? is blank  or email(?) == true  : '' : 'email.invalid' }
+			    			
+                     ]]>
+			</value>
+		</property>
+	</bean>
+	<bean id="registerUserValidator" class="org.project.company.greenhomes.common.validation.RegisterUserValidator">
+		<property name="registerUserValangValidator" ref="registerUserValangValidator"/>
+	</bean>
+	<bean id="userNameValangValidator" class="org.springmodules.validation.valang.ValangValidator">
+		<property name="valang">
+			<value>
+				<![CDATA[
+							{ userName   : ? is not blank : '' : 'userName.req' }
+							{ userName 	 : ? is blank  or matches('^[a-zA-Z0-9@.\'_-]*$',?) == true  : '' : 'userName.invalid' }
+							{ userName 	     : ? is blank  or length(?) <= 32 or length(?) >= 6  : '' : 'userName.invalid' }						            							
+                     ]]>
+			</value>
+		</property>
+	</bean>
+	<bean id="passwordValangValidator" class="org.springmodules.validation.valang.ValangValidator">
+		<property name="valang">
+			<value>
+				<![CDATA[
+            	            { userId 	 : ? is not blank  : '' : 'user.invalid' }
+							{ passwordModel.oldPassword 	 : ? is not blank  : '' : 'password.oldPassword.req' }	
+							{ passwordModel.oldPassword 	 : ? is blank  or length(?) <= 12 and length(?) >= 6  : '' : 'password.newPassword.short' }						
+							{ passwordModel.newPassword 	 : ? is not blank  : '' : 'password.newPassword.req' }
+							{ passwordModel.newPassword 	     : ? is blank  or length(?) <= 12 and length(?) >= 6  : '' : 'password.newPassword.short' }							
+							{ passwordModel.newPasswordConfirm 	 : ? is not blank  : '' : 'password.newPasswordConfirm.req' }														
+							{ passwordModel.newPasswordConfirm   : ? is blank or  ? == passwordModel.newPassword: '' : 'password.newPasswordConfirm.no.match' }
+						
+							
+                     ]]>
+			</value>
+		</property>
+	</bean>
+	<!-- left blank for now as only used as reference -->
+	<bean id="searchValangValidator" class="org.springmodules.validation.valang.ValangValidator">
+		<property name="valang">
+			<value>
+				<![CDATA[
+            	 { country 	 : ? is not blank  : '' : 'no.country' }               							
+                     ]]>
+			</value>
+		</property>
+	</bean>
+	<bean id="userSearchValangValidator" class="org.springmodules.validation.valang.ValangValidator">
+		<property name="valang">
+			<value>
+				<![CDATA[
+            	 { userName 	 : ? is not blank  or emailAddress is not blank : '' : 'user.search.field.req' }	
+            	 { userName 	 : ? is blank  or matches('^[a-zA-Z0-9@.\'_-]*$',?) == true  : '' : 'userName.invalid' }            	 
+            	 { emailAddress  : ? is blank  or email(?) == true  : '' : 'email.invalid' }               							
+                     ]]>
+			</value>
+		</property>
+	</bean>
+	<bean id="searchValidator" class="org.project.company.greenhomes.common.validation.SearchValidator">
+		<property name="searchValangValidator" ref="searchValangValidator"/>
+	</bean>
+	<!-- the location of the error messages file, used by the validators -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<value>classpath:messages</value>
+		</property>
+	</bean>
+
+
+</beans>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+    <bean id="userDAO" class="org.project.company.greenhomes.dao.hibernate.UserDAOImpl">
+        <property name="sessionFactory">
+            <ref bean="userSessionFactory" />
+        </property>
+		<property name="jdbcTemplate">
+			<ref bean="jdbcTemplate" />
+		</property>         
+    </bean> 
+    <bean id="batchSummaryDAO" class="org.project.company.greenhomes.dao.hibernate.BatchSummaryAndScheduleDAOImpl">
+        <property name="sessionFactory">
+            <ref bean="userSessionFactory" />
+        </property>
+		<property name="jdbcTemplate">
+			<ref bean="jdbcTemplate" />
+		</property>          
+    </bean>    
+    <bean id="exceptionReportDAO" class="org.project.company.greenhomes.dao.hibernate.ExceptionReportDAOImpl">
+        <property name="sessionFactory">
+            <ref bean="userSessionFactory" />
+        </property>
+    </bean>      
+    <bean id="propertyDAO" class="org.project.company.greenhomes.dao.hibernate.PropertyDAOImpl">
+    <property name="batchSize" value="30"/> 	
+        <property name="sessionFactory">
+            <ref bean="userSessionFactory" />
+        </property>
+		<property name="jdbcTemplate">
+			<ref bean="jdbcTemplate" />
+		</property>        
+    </bean>    
+    <!-- from this point the daos use jdbc template -->
+    <bean id="localityDAO" class="org.project.company.greenhomes.dao.hibernate.LocalityDAOImpl">
+        <property name="sessionFactory">
+            <ref bean="userSessionFactory" />
+        </property>    
+		<property name="jdbcTemplate">
+			<ref bean="jdbcTemplate" />
+		</property>
+    </bean>     
+    
+    
+         
+</beans>

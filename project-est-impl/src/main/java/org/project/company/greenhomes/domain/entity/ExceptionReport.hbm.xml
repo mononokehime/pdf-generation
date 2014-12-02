@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.project.company.greenhomes.domain.entity.ExceptionReport" table="GREEN_HOMES.EXCEPTION_REPORT">
+		<cache usage="read-write"/>
+		<id name="exceptionReportId" type="java.lang.Long">
+			<column name="exception_report_id"/>
+			<generator class="sequence">
+				<param name="sequence">component_id_sequence</param>
+			</generator>
+		</id>
+		<property name="processId" type="java.lang.String">
+			<column name="process_id"/>
+		</property>
+		<property name="message" type="java.lang.String">
+			<column name="message" not-null="true"/>
+		</property>
+		<property name="functionalArea" type="java.lang.String">
+			<column name="functional_area" not-null="true"/>
+		</property>
+		<property name="exception" type="java.lang.String">
+			<column name="exception" not-null="true"/>
+		</property>
+	</class>
+</hibernate-mapping>

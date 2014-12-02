@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.project.company.greenhomes.domain.entity.PropertyAddress" table="GREEN_HOMES.PROPERTY_ADDRESS">
+		<id name="propertyAddressId" type="java.lang.String">
+			<column name="property_address_id"/>
+		</id>
+		<property name="uploadId" type="java.lang.Long" update="false">
+			<column name="upload_id" not-null="true"/>
+		</property>
+		<property name="postcodeIncode" type="java.lang.String">
+			<column name="postcode_incode" length="4" not-null="false"/>
+		</property>
+		<property name="postcodeOutcode" type="java.lang.String">
+			<column name="postcode_outcode" length="4" not-null="false"/>
+		</property>
+		<property name="addressLine1" type="java.lang.String">
+			<column name="address_line_1" length="128" not-null="false"/>
+		</property>
+		<property name="addressLine2" type="java.lang.String">
+			<column name="address_line_2" length="128" not-null="false"/>
+		</property>
+		<property name="addressLine3" type="java.lang.String">
+			<column name="address_line_3" length="128" not-null="false"/>
+		</property>
+		<property name="town" type="java.lang.String">
+			<column name="town" length="64" not-null="true"/>
+		</property>
+		<property name="district" type="java.lang.String">
+			<column name="district" length="128" not-null="false"/>
+		</property>
+		<property name="county" type="java.lang.String">
+			<column name="county" length="64" not-null="false"/>
+		</property>
+		<property name="country" type="java.lang.String">
+			<column name="country" length="4" not-null="false"/>
+		</property>
+		<property name="ESTAC" type="java.lang.Integer">
+			<column name="ESTAC" not-null="false"/>
+		</property>
+		<property name="localAuthority" type="java.lang.String">
+			<column name="local_authority" length="4" not-null="false"/>
+		</property>
+		<property name="addressKey" type="java.lang.String">
+			<column name="address_key" length="32" not-null="false"/>
+		</property>
+		<property name="scheduleId" type="java.lang.Long">
+			<column name="schedule_id" not-null="false"/>
+		</property>
+		<property name="workFlowStatus" type="java.lang.String">
+			<column name="work_flow_status" not-null="true" length="12"/>
+		</property>
+		<property name="locality" type="java.lang.String">
+			<column name="locality" length="64" not-null="false"/>
+		</property>
+		<set name="propertyAddressAttributeSet" table="GREEN_HOMES.property_address_attribute" cascade="save-update"
+			 lazy="true" batch-size="5">
+			<key column="property_address_id"/>
+			<composite-element class="org.project.company.greenhomes.domain.entity.PropertyAttribute">
+				<property name="name" type="java.lang.String">
+					<column name="name" length="32" not-null="true"/>
+				</property>
+				<property name="value" type="java.lang.String">
+					<column name="value" length="64" not-null="false"/>
+				</property>
+			</composite-element>
+		</set>
+		<joined-subclass name="org.project.company.greenhomes.domain.entity.PropertySale" table="GREEN_HOMES.PROPERTY_SALE">
+			<key column="property_address_id"/>
+			<property name="saleDate" type="java.util.Date">
+				<column name="sale_date" not-null="true"/>
+			</property>
+			<property name="propertyType" type="java.lang.String">
+				<column name="property_type" length="1" not-null="false"/>
+			</property>
+		</joined-subclass>
+		<joined-subclass name="org.project.company.greenhomes.domain.entity.PropertyEPC" table="GREEN_HOMES.PROPERTY_EPC">
+			<key column="property_address_id"/>
+			<property name="inspectionDate" type="java.util.Date">
+				<column name="inspection_date" not-null="true"/>
+			</property>
+			<property name="rrn" type="java.lang.String">
+				<column name="rrn" not-null="true" length="16"/>
+			</property>
+			<property name="energyRatingCurrent" type="java.lang.Integer">
+				<column name="energy_rating_current" not-null="true" length="3"/>
+			</property>
+			<property name="energyRatingPotential" type="java.lang.Integer">
+				<column name="energy_rating_potential" not-null="true" length="3"/>
+			</property>
+			<set name="measuresSet" cascade="save-update" lazy="true" table="GREEN_HOMES.PROPERTY_MEASURES"
+				 batch-size="10" order-by="sort_order">
+				<key>
+					<column name="property_address_id" length="128"/>
+				</key>
+				<composite-element class="org.project.company.greenhomes.domain.entity.PropertyMeasure">
+					<property name="categoryId" type="java.lang.Integer">
+						<column name="category_id" length="2" not-null="true"/>
+					</property>
+					<property name="heading" type="java.lang.String">
+						<column name="heading" length="128" not-null="true"/>
+					</property>
+					<property name="description" type="java.lang.String">
+						<column name="description" length="2096" not-null="true"/>
+					</property>
+					<property name="typicalSaving" type="java.lang.Integer">
+						<column name="typical_saving" length="4" not-null="true"/>
+					</property>
+					<property name="sortOder" type="java.lang.Integer">
+						<column name="sort_order" length="2" not-null="true"/>
+					</property>
+				</composite-element>
+
+			</set>
+		</joined-subclass>
+	</class>
+</hibernate-mapping>

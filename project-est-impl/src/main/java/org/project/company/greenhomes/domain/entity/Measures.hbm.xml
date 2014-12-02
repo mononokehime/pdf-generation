@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.project.company.greenhomes.domain.entity.Measure" table="GREEN_HOMES.MEASURES">
+		<cache usage="read-only"/>
+		<id name="measureId" type="java.lang.Integer">
+			<column name="measure_id"/>
+			<generator class="assigned"/>
+		</id>
+		<property name="category" type="java.lang.Integer">
+			<column name="CATEGORY" length="3" not-null="true"/>
+		</property>
+		<property name="summary" type="java.lang.String">
+			<column name="SUMMARY" length="128" not-null="true"/>
+		</property>
+		<property name="heading" type="java.lang.String">
+			<column name="HEADING" length="128" not-null="false"/>
+		</property>
+		<property name="description" type="java.lang.String">
+			<column name="DESCRIPTION" length="2096" not-null="false"/>
+		</property>
+		<property name="estHeading" type="java.lang.String">
+			<column name="EST_HEADING" length="128" not-null="false"/>
+		</property>
+		<property name="estDescription" type="java.lang.String">
+			<column name="EST_DESCRIPTION" length="2096" not-null="false"/>
+		</property>
+	</class>
+</hibernate-mapping>

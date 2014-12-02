@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<!-- GlassfishJndiObjectFactoryBean extends JndiObjectFactoryBean and it is supposed
+	to fix a problem with JNDI java mail sessions on Glassfish. Look javadoc for this class -->
+	<bean id="mailSession"
+		  class="org.project.company.reports.email.GlassfishJndiObjectFactoryBean">
+		<property name="jndiName" value="greenHomesMail/Session"/>
+	</bean>
+
+	<bean id="mailSender"
+		  class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="session" ref="mailSession"/>
+	</bean>
+	<bean id="landRegistryFailureUpload"
+		  class="org.springframework.mail.SimpleMailMessage">
+		<property name="from">
+			<value>
+				<![CDATA[${email.address.admin}]]>
+			</value>
+		</property>
+		<property name="to">
+			<value>
+				<![CDATA[${email.address.upload.result}]]>
+			</value>
+		</property>
+		<property name="subject"
+				  value="Green Homes – Land Registry Data upload failure"/>
+		<property name="text">
+			<value>
+				<![CDATA[
+Please note the automated land registry data upload failed with the following message: 
+
+%MESSAGE%			
+				]]>
+			</value>
+		</property>
+	</bean>
+	<bean id="landRegistrySuccessfulUpload"
+		  class="org.springframework.mail.SimpleMailMessage">
+		<property name="from">
+			<value>
+				<![CDATA[${email.address.admin}]]>
+			</value>
+		</property>
+		<property name="to">
+			<value>
+				<![CDATA[${email.address.upload.result}]]>
+			</value>
+		</property>
+		<property name="subject"
+				  value="Green Homes – Land Registry Data upload success"/>
+		<property name="text">
+			<value>
+				<![CDATA[
+Please note the automated land registry data upload successfully completed. Here is a summary:
+Completion time: %COMPLETION_TIME%
+Records process: %RECORDS_PROCESSED%	
+Failures: %FAILURES%			
+The file was renamed: %FILE_RENAME%. If this value is false please ask the system administrator to manually move the file to prevent it being processed a second time.
+				]]>
+			</value>
+		</property>
+	</bean>
+	<bean id="landMarkFailureUpload"
+		  class="org.springframework.mail.SimpleMailMessage">
+		<property name="from">
+			<value>
+				<![CDATA[${email.address.admin}]]>
+			</value>
+		</property>
+		<property name="to">
+			<value>
+				<![CDATA[${email.address.upload.result}]]>
+			</value>
+		</property>
+		<property name="subject"
+				  value="Green Homes – LandMark Data upload failure"/>
+		<property name="text">
+			<value>
+				<![CDATA[
+Please note the automated land mark data upload failed with the following message: 
+
+%MESSAGE%			
+				]]>
+			</value>
+		</property>
+	</bean>
+	<bean id="landMarkSuccessfulUpload"
+		  class="org.springframework.mail.SimpleMailMessage">
+		<property name="from">
+			<value>
+				<![CDATA[${email.address.admin}]]>
+			</value>
+		</property>
+		<property name="to">
+			<value>
+				<![CDATA[${email.address.upload.result}]]>
+			</value>
+		</property>
+		<property name="subject"
+				  value="Green Homes – LandMark Data upload success"/>
+		<property name="text">
+			<value>
+				<![CDATA[
+Please note the automated land mark data upload successfully completed. Here is a summary:
+Completion time: %COMPLETION_TIME%
+Records process: %RECORDS_PROCESSED%	
+Failures: %FAILURES%			
+The file was renamed: %FILE_RENAME%. If this value is false please ask the system administrator to manually move the file to prevent it being processed a second time.
+				]]>
+			</value>
+		</property>
+	</bean>
+	<bean id="passwordResetMessage"
+		  class="org.springframework.mail.SimpleMailMessage">
+		<property name="from">
+			<value>
+				<![CDATA[${email.address.admin}]]>
+			</value>
+		</property>
+		<property name="subject"
+				  value="Password reset"/>
+		<property name="text">
+			<value>
+				<![CDATA[
+Dear %USER%
+
+Your password has been successfully reset to:		
+				]]>
+			</value>
+		</property>
+	</bean>
+	<bean id="ftpComplete"
+		  class="org.springframework.mail.SimpleMailMessage">
+		<property name="from">
+			<value>
+				<![CDATA[${email.address.admin}]]>
+			</value>
+		</property>
+		<property name="to">
+			<value>
+				<![CDATA[${email.address.upload.result}]]>
+			</value>
+		</property>
+		<property name="subject"
+				  value="Green Homes – FTP complete."/>
+		<property name="text">
+			<value>
+				<![CDATA[
+Please note the automated ftp of pdfs to hestia completed with the following message: 		
+				]]>
+			</value>
+		</property>
+	</bean>
+</beans>

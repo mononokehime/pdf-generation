@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.project.company.greenhomes.domain.entity.UploadSummary" table="GREEN_HOMES.UPLOAD_SUMMARY">
+		<cache usage="read-write"/>
+		<id name="uploadSummaryId" type="java.lang.Long">
+			<column name="upload_summary_id"/>
+			<generator class="sequence">
+				<param name="sequence">component_id_sequence</param>
+			</generator>
+		</id>
+		<property name="uploadType" type="java.lang.String">
+			<column name="upload_type" length="16" not-null="true"/>
+		</property>
+		<property name="errorCount" type="java.lang.Integer">
+			<column name="error_count" not-null="false"/>
+		</property>
+		<property name="numberOfRows" type="java.lang.Integer">
+			<column name="number_of_rows" not-null="false"/>
+		</property>
+		<property name="startTime" type="java.util.Date">
+			<column name="start_time" not-null="true"/>
+		</property>
+		<property name="endTime" type="java.util.Date">
+			<column name="end_time" not-null="false"/>
+		</property>
+	</class>
+
+</hibernate-mapping>

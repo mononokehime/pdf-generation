@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.project.company.greenhomes.domain.entity.Schedule" table="GREEN_HOMES.SCHEDULES">
+		<id name="scheduleId" type="java.lang.Long">
+			<column name="schedule_id"/>
+			<generator class="sequence">
+				<param name="sequence">component_id_sequence</param>
+			</generator>
+		</id>
+		<property name="scheduleById" type="java.lang.Long">
+			<column name="scheduled_by_id" length="19" not-null="true"/>
+		</property>
+		<property name="requestDate" type="java.util.Date">
+			<column name="request_date" not-null="true"/>
+		</property>
+		<property name="startDate" type="java.util.Date">
+			<column name="start_date" not-null="true"/>
+		</property>
+		<property name="endDate" type="java.util.Date">
+			<column name="end_date" not-null="false"/>
+		</property>
+		<property name="scheduleSummary" type="java.lang.String">
+			<column name="schedule_summary" length="512" not-null="false"/>
+		</property>
+		<property name="templateId" type="java.lang.String">
+			<column name="template_id" length="32" not-null="false"/>
+		</property>
+		<property name="templateVersion" type="java.lang.String">
+			<column name="template_version" length="8" not-null="false"/>
+		</property>
+	</class>
+</hibernate-mapping>

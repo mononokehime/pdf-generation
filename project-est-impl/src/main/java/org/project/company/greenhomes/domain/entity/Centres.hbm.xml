@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.project.company.greenhomes.domain.entity.Centre" table="sense.centres">
+		<cache usage="read-only"/>
+		<id name="centreCode" type="java.lang.Integer">
+			<column name="centre_code"/>
+			<generator class="assigned"/>
+		</id>
+		<property name="centreName" type="java.lang.String">
+			<column name="CENTRE_NAME" length="100" not-null="true"/>
+		</property>
+		<property name="address1" type="java.lang.String">
+			<column name="ADDRESS1" length="50" not-null="true"/>
+		</property>
+		<property name="address2" type="java.lang.String">
+			<column name="ADDRESS2" length="50" not-null="false"/>
+		</property>
+		<property name="address3" type="java.lang.String">
+			<column name="ADDRESS3" length="50" not-null="false"/>
+		</property>
+		<property name="address4" type="java.lang.String">
+			<column name="ADDRESS4" length="50" not-null="false"/>
+		</property>
+		<property name="address5" type="java.lang.String">
+			<column name="ADDRESS5" length="50" not-null="false"/>
+		</property>
+		<property name="postcode" type="java.lang.String">
+			<column name="POSTCODE" length="7" not-null="false"/>
+		</property>
+		<property name="contactName" type="java.lang.String">
+			<column name="CONTACT_NAME" length="50" not-null="false"/>
+		</property>
+		<property name="contactJobTitle" type="java.lang.String">
+			<column name="CONTACT_JOB_TITLE" length="50" not-null="false"/>
+		</property>
+	</class>
+</hibernate-mapping>

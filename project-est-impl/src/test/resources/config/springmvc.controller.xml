@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	<bean id="multipartResolver"
+		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- one of the properties available; the maximum file size in bytes -->
+		<property name="maxUploadSize" value="1000000000"/>
+	</bean>
+	<bean id="urlController"
+		  class="org.springframework.web.servlet.mvc.UrlFilenameViewController"/>
+
+	<bean id="userManagementController" class="org.project.company.greenhomes.web.spring.controller.UserManagementController">
+		<property name="userService" ref="userService"/>
+		<property name="referenceDataService" ref="referenceDataService"/>
+		<property name="passwordValangValidator" ref="passwordValangValidator"/>
+		<property name="userNameValangValidator" ref="userNameValangValidator"/>
+		<property name="userSearchValangValidator" ref="userSearchValangValidator"/>
+		<property name="registerUserValidator" ref="registerUserValidator"/>
+		<property name="mailService" ref="mailService"/>
+	</bean>
+	<bean id="searchAndScheduleController"
+		  class="org.project.company.greenhomes.web.spring.controller.SearchAndScheduleController">
+		<property name="queryEngineService" ref="queryEngineService"/>
+		<property name="searchValidator" ref="searchValidator"/>
+		<property name="referenceDataService" ref="referenceDataService"/>
+		<property name="batchSummaryAndScheduleService" ref="batchSummaryService"/>
+		<property name="pdfLetterBuilder" ref="pdfLetterBuilder"/>
+		<property name="propertyService" ref="propertyService"/>
+		<property name="exceptionReportService" ref="exceptionReportService"/>
+		<property name="summariesToDisplay" value="${number.of.schedule.summaries.display}"/>
+		<property name="resultsDisplaySize" value="${number.of.file.upload.results}"/>
+
+	</bean>
+	<bean id="templateController" class="org.project.company.greenhomes.web.spring.controller.TemplateController">
+		<property name="pdfTemplateDirectory" value="${pdf.template.directory}"/>
+	</bean>
+	<bean id="fileUploadController" class="org.project.company.greenhomes.web.spring.controller.FileUploadController">
+		<property name="batchSummaryService" ref="batchSummaryService"/>
+		<property name="propertyService" ref="propertyService"/>
+		<property name="numberOfUploadSummaries" value="${number.of.file.upload.summaries.display}"/>
+		<property name="errorsToDisplay" value="${number.of.errors.to.display}"/>
+		<property name="fileUploadLocationLandRegistry" value="${file.upload.location.land.registry}"/>
+		<property name="fileUploadLocationLandMark" value="${file.upload.location.landmark}"/>
+		<property name="allowForcedUpload" value="${file.upload.allow.forced}"/>
+
+	</bean>
+</beans>
